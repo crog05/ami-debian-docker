@@ -1,0 +1,7 @@
+---
+- name: 'Provision debian docker Image'
+  hosts: default
+  become: true
+  roles:
+    - docker
+

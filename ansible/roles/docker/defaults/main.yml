@@ -1,0 +1,13 @@
+---
+
+pkg_default_list:
+  - "docker-ce"
+  - "docker-ce-cli"
+  - "docker-ce-rootless-extras"
+  - "containerd.io"
+
+repo_url: https://download.docker.com/linux
+release: stable
+arch: arm64
+repository: "deb [arch={{ arch }}] {{ repo_url }}/debian {{ ansible_distribution_release }} {{ release }}"
+apt_gpg_key: "{{ repo_url }}/debian/gpg"

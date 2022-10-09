@@ -1,0 +1,39 @@
+---
+
+- name: Add Docker apt key.
+  ansible.builtin.get_url:
+    url: "{{ apt_gpg_key }}"
+    dest: /etc/apt/trusted.gpg.d/docker.asc
+    mode: '0644'
+    force: true
+
+- name: Add Docker repository.
+  apt_repository:
+    repo: "{{ repository }}"
+    state: present
+
+- name: Update apt cache
+  apt: 
+    update_cache=yes 
+
+# Install latest version of our package list
+- name: install default packages
+  apt:
+    name: "{{ pkg_default_list }}"
+    state: latest
+  register: apt_action
+  retries: 20
+  delay: 10
+  until: apt_action is success
+
+# Install docker-compose packages with 
+- name: Install docker-compose
+  pip:
+    name: docker-compose
+
+- name: Ensure Docker is enabled and started
+  service:
+    name: docker
+    state: "started"
+    enabled: "yes"
+
